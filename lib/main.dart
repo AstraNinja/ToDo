@@ -13,6 +13,8 @@
 /// - added delete buitton for items
 ///
 
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,7 +29,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    /* return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ToDo',
       home: TodoList(),
@@ -36,6 +38,9 @@ class App extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch()
             .copyWith(secondary: Colors.deepOrangeAccent),
       ),
+    ); */
+    return CupertinoApp(
+      home: TodoList(),
     );
   }
 }
@@ -156,43 +161,36 @@ class _TodoListState extends State<TodoList> {
   /// APP UI
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('ToDo'),
-        backgroundColor: Colors.deepOrange,
-        actions: [
-          IconButton(
-            onPressed: () => _setListSP(_todoList),
-            icon: Icon(Icons.save),
-            tooltip: "Save to SharedPreferences",
-          ),
-          IconButton(
-            onPressed: () => _loadDataToList(),
-            icon: Icon(Icons.download),
-            tooltip: "Load from SharedPreferences",
-          ),
-          IconButton(
-            onPressed: () {
-              setState(() {
-                _todoList = [];
-              });
-            },
-            icon: Icon(Icons.delete),
-            tooltip: "Delete list",
-          ),
-        ],
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text("ToDo"),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.all(8),
+          onPressed: () {
+            setState(() {
+              _todoList = [];
+            });
+          },
+          child: Icon(Icons.delete),
+        ),
       ),
-      body: Column(children: [
+      child: Column(children: [
         ListView.builder(
+          shrinkWrap: true,
           itemCount: _todoList.length,
           itemBuilder: ((context, index) {
-            return ToDoItem(_todoList[index], index);
+            if (_todoList.isEmpty) {
+              return Text("Die Liste ist leer!");
+            } else {
+              return ToDoItem(_todoList[index], index);
+            }
           }),
         ),
         CupertinoButton(
-          child: Text("Hinzufügen"),
           onPressed: () => _displayDialog(context),
-        )
+          color: Colors.blue,
+          child: Text("Hinzufügen"),
+        ),
       ]),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () => _displayDialog(context),
