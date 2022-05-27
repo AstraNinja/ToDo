@@ -11,6 +11,9 @@
 /// - removed _getItems(), because it is no longer used.
 /// - changed the process of building the widgets gromm the list.
 /// - added delete buitton for items
+///
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,7 +33,8 @@ class App extends StatelessWidget {
       home: TodoList(),
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.deepOrangeAccent),
+        colorScheme: ColorScheme.fromSwatch()
+            .copyWith(secondary: Colors.deepOrangeAccent),
       ),
     );
   }
@@ -178,17 +182,23 @@ class _TodoListState extends State<TodoList> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: _todoList.length,
-        itemBuilder: ((context, index) {
-          return ToDoItem(_todoList[index], index);
-        }),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _displayDialog(context),
-        tooltip: 'Eintrag hinzufügen',
-        child: Icon(Icons.add),
-      ),
+      body: Column(children: [
+        ListView.builder(
+          itemCount: _todoList.length,
+          itemBuilder: ((context, index) {
+            return ToDoItem(_todoList[index], index);
+          }),
+        ),
+        CupertinoButton(
+          child: Text("Hinzufügen"),
+          onPressed: () => _displayDialog(context),
+        )
+      ]),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () => _displayDialog(context),
+      //   tooltip: 'Eintrag hinzufügen',
+      //   child: Icon(Icons.add),
+      // ),
     );
   }
 
