@@ -67,25 +67,25 @@ class _ToDoScreenState extends State<ToDoScreen> {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
+          return CupertinoAlertDialog(
             title: const Text('Füge einen Eintrag zu deiner Liste hinzu'),
-            content: TextField(
+            content: CupertinoTextField(
               controller: _textFieldController,
-              decoration: const InputDecoration(hintText: 'Name des Eintrages'),
             ),
-            actions: <Widget>[
-              TextButton(
+            actions: <CupertinoDialogAction>[
+              CupertinoDialogAction(
                 child: const Text('Hinzufügen'),
                 onPressed: () {
                   Navigator.of(context).pop();
                   _addTodoItem(_textFieldController.text);
                 },
               ),
-              TextButton(
-                child: const Text('Abbrechen'),
+              CupertinoDialogAction(
+                isDefaultAction: true,
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
+                child: const Text('Abbrechen'),
               )
             ],
           );
@@ -131,24 +131,30 @@ class _ToDoScreenState extends State<ToDoScreen> {
           child: Icon(Icons.delete),
         ),
       ),
-      child: Column(children: [
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: _todoList.length,
-          itemBuilder: ((context, index) {
-            if (_todoList.isEmpty) {
-              return Text("Die Liste ist leer!");
-            } else {
-              return toDoItem(_todoList[index], index);
-            }
-          }),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 50),
+        child: SizedBox.expand(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _todoList.isEmpty
+                    ? Text("Die Liste ist leer!")
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: _todoList.length,
+                        itemBuilder: ((context, index) {
+                          return toDoItem(_todoList[index], index);
+                        }),
+                      ),
+                CupertinoButton(
+                  onPressed: () => _displayDialog(context),
+                  color: Colors.blue,
+                  child: Text("Hinzufügen"),
+                ),
+              ]),
         ),
-        CupertinoButton(
-          onPressed: () => _displayDialog(context),
-          color: Colors.blue,
-          child: Text("Hinzufügen"),
-        ),
-      ]),
+      ),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () => _displayDialog(context),
       //   tooltip: 'Eintrag hinzufügen',
