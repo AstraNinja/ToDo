@@ -68,7 +68,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
         context: context,
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
-            title: const Text('Füge einen Eintrag zu deiner Liste hinzu'),
+            title: Text('Füge einen Eintrag zu deiner Liste hinzu',
+                style: CupertinoTheme.of(context).textTheme.textStyle),
             content: CupertinoTextField(
               controller: _textFieldController,
             ),
@@ -139,7 +140,8 @@ class _ToDoScreenState extends State<ToDoScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _todoList.isEmpty
-                    ? Text("Die Liste ist leer!")
+                    ? Text("Die Liste ist leer!",
+                        style: CupertinoTheme.of(context).textTheme.textStyle)
                     : ListView.builder(
                         shrinkWrap: true,
                         itemCount: _todoList.length,
