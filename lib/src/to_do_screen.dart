@@ -63,6 +63,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
   // }
 
   /// ITEM CREATION DIALOG
+  // ignore: unused_element
   Future<Future> _displayDialog(BuildContext context) async {
     return showDialog(
         context: context,
@@ -150,8 +151,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                     ? Padding(
                         padding: const EdgeInsets.only(top: 100, bottom: 8),
                         child: Text("Die Liste ist leer!",
-                            style:
-                                CupertinoTheme.of(context).textTheme.textStyle),
+                            style: CupertinoTheme.of(context).textTheme.textStyle),
                       )
                     : ListView.builder(
                         shrinkWrap: true,
