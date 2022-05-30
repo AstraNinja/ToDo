@@ -1,3 +1,4 @@
+import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -95,16 +96,21 @@ class _ToDoScreenState extends State<ToDoScreen> {
 
   /// TODO ITEM WIDGET
   Widget toDoItem(String text, int index) {
-    return ListTile(
-      title: Text(text),
-      trailing: IconButton(
-        onPressed: () {
-          // print(index);
-          setState(() {
-            _todoList.removeAt(index);
-          });
-        },
-        icon: Icon(Icons.delete),
+    return Material(
+      child: ListTile(
+        title: Text(text),
+        tileColor: Colors.black,
+        textColor: Colors.white,
+        trailing: CupertinoButton(
+          onPressed: () {
+            // print(index);
+            setState(() {
+              _todoList.removeAt(index);
+            });
+          },
+          //child: Icon(Icons.delete),
+          child: Icon(CupertinoIcons.delete),
+        ),
       ),
     );
   }
@@ -129,19 +135,25 @@ class _ToDoScreenState extends State<ToDoScreen> {
               _todoList = [];
             });
           },
-          child: Icon(Icons.delete),
+          child: Icon(CupertinoIcons.delete),
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(top: 50),
-        child: SizedBox.expand(
+        padding: const EdgeInsets.only(top: 10),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
           child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _todoList.isEmpty
-                    ? Text("Die Liste ist leer!",
-                        style: CupertinoTheme.of(context).textTheme.textStyle)
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 100, bottom: 8),
+                        child: Text("Die Liste ist leer!",
+                            style:
+                                CupertinoTheme.of(context).textTheme.textStyle),
+                      )
                     : ListView.builder(
                         shrinkWrap: true,
                         itemCount: _todoList.length,
@@ -150,7 +162,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
                         }),
                       ),
                 CupertinoButton(
-                  onPressed: () => _displayDialog(context),
+                  onPressed: () => _showAlertDialog(context),
                   color: Colors.blue,
                   child: Text("Hinzufügen"),
                 ),
@@ -173,4 +185,37 @@ class _ToDoScreenState extends State<ToDoScreen> {
   //   }
   //   return todoWidgets;
   // }
+
+  void _showAlertDialog(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Element hinzufügen'),
+        content: CupertinoTextField(
+          controller: _textFieldController,
+        ),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            /// This parameter indicates this action is the default,
+            /// and turns the action's text to bold text.
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Abbrechen'),
+          ),
+          CupertinoDialogAction(
+            /// This parameter indicates the action would perform
+            /// a destructive action such as deletion, and turns
+            /// the action's text color to red.
+            onPressed: () {
+              Navigator.pop(context);
+              _addTodoItem(_textFieldController.text);
+            },
+            child: const Text('Hinzufügen'),
+          )
+        ],
+      ),
+    );
+  }
 }
